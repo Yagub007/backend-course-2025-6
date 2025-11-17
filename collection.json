@@ -1,0 +1,697 @@
+{
+	"info": {
+		"_postman_id": "10b31f7a-6393-4969-b250-e66b1099c542",
+		"name": "lab6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48626199",
+		"_collection_link": "https://aliev092006-3232412.postman.co/workspace/Yagub's-Workspace~15d4c80f-d2de-4d7e-8e8b-a716b8f235d3/collection/48626199-10b31f7a-6393-4969-b250-e66b1099c542?action=share&source=collection_link&creator=48626199"
+	},
+	"item": [
+		{
+			"name": "/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "inventory_name",
+							"value": "\"Ноутбук\"",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "\"Dell Inspiron4\"",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/alievyagub/Desktop/2025-06-16 22.15.53.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "/register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "inventory_name",
+									"value": "\"Ноутбук\"",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "\"Dell Inspiron4\"",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/Users/alievyagub/Desktop/2025-06-16 22.15.53.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/register",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:44:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 4,\n    \"name\": \"\\\"Ноутбук\\\"\",\n    \"description\": \"\\\"Dell Inspiron4\\\"\",\n    \"photo_url\": \"/inventory/4/photo\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/inventory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/inventory",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"inventory"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/inventory",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"inventory"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:45:03 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 2,\n        \"name\": \"\\\"Ноутбук\\\"\",\n        \"description\": \"\\\"Dell Inspiron2\\\"\",\n        \"photo_url\": null\n    },\n    {\n        \"id\": 3,\n        \"name\": \"\\\"Ноутбук\\\"\",\n        \"description\": \"\\\"Dell Inspiron3\\\"\",\n        \"photo_url\": \"/inventory/3/photo\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"\\\"Ноутбук\\\"\",\n        \"description\": \"\\\"Dell Inspiron4\\\"\",\n        \"photo_url\": \"/inventory/4/photo\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "/inventory/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/inventory/3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"inventory",
+						"3"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/inventory/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"inventory",
+								"4"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:45:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 4,\n    \"name\": \"\\\"Ноутбук\\\"\",\n    \"description\": \"\\\"Dell Inspiron4\\\"\",\n    \"photo_url\": \"/inventory/4/photo\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/inventory/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Ноутбук Dell XPS 13\",\n  \"description\": \"Оновлений опис ноутбука\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "/inventory/3",
+					"path": [
+						"inventory",
+						"3"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ноутбук Dell XPS 13\",\n  \"description\": \"Оновлений опис ноутбука\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/inventory/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"inventory",
+								"4"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:47:45 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 4,\n    \"name\": \"Ноутбук Dell XPS 13\",\n    \"description\": \"Оновлений опис ноутбука\",\n    \"photoFile\": \"cdebzfdl0b5ww4hgbpiqlbdrw.15.53.jpg\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/inventory/:id/photo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/inventory/3/photo",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"inventory",
+						"3",
+						"photo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/inventory/:id/photo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/alievyagub/Desktop/2025-03-09 15.56.17.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/inventory/3/photo",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"inventory",
+						"3",
+						"photo"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/Users/alievyagub/Desktop/2025-03-09 15.56.17.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/inventory/3/photo",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"inventory",
+								"3",
+								"photo"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:46:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 3,\n    \"name\": \"\\\"Ноутбук\\\"\",\n    \"description\": \"\\\"Dell Inspiron3\\\"\",\n    \"photo_url\": \"/inventory/3/photo\"\n}"
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/RegisterForm.html",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"RegisterForm.html"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:46:20 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "<!DOCTYPE html>\n<html>\n    <body>\n        <h2>Inventory Registration</h2>\n        <form method=\"post\" action=\"/register\" enctype=\"multipart/form-data\">\n            <label for=\"note_name_input\">Name:</label>\n            <br>\n            <input type=\"text\" id=\"inventory_name\" name=\"inventory_name\">\n            <br>\n            <br>\n            <label for=\"note_input\">Description:</label>\n            <br>\n            <textarea id=\"description\" name=\"description\" rows=\"4\" cols=\"50\"></textarea>\n            <br>\n            <br>\n            <label for=\"photo\">Photo:</label>\n            <br>\n            <input type=\"file\" id=\"photo\" name=\"photo\">\n            <br>\n            <br>\n            <button type=\"submit\">Register</button>\n        </form>\n    </body>\n</html>"
+				}
+			]
+		},
+		{
+			"name": "/SearchForm.html",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/SearchForm.html",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"SearchForm.html"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/SearchForm.html",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"SearchForm.html"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 16:46:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "<!DOCTYPE html>\n<html>\n    <body>\n        <h1>Inventory Search</h1>\n        <form action=\"/search\" method=\"post\">\n            <label for=\"id\">ID:</label>\n            <input type=\"text\" id=\"id\" name=\"id\" required>\n            <input type=\"checkbox\" id=\"includePhoto\" name=\"includePhoto\">\n            <label for=\"includePhoto\">Include photo in description</label>\n            <button type=\"submit\">Search</button>\n        </form>\n    </body>\n</html>"
+				}
+			]
+		},
+		{
+			"name": "/search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "has_photo",
+							"value": "on",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/search",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "has_photo",
+									"value": "on",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"search"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Nov 2025 17:01:55 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 3,\n    \"name\": \"\\\"Ноутбук\\\"\",\n    \"description\": \"\\\"Dell Inspiron3\\\" [Фото: /inventory/3/photo]\",\n    \"photoFile\": \"pp9tswd3mv2iwu6pnnlg6l24b.56.17.jpg\"\n}"
+				}
+			]
+		}
+	]
+}

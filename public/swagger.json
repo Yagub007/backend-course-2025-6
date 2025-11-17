@@ -1,0 +1,84 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Inventory Service API",
+    "version": "1.0.0",
+    "description": "Документація сервісу інвентаризації (Lab #6)"
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Реєстрація нової речі",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inventory_name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "photo": { "type": "string", "format": "binary" }
+                },
+                "required": ["inventory_name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Missing name" }
+        }
+      }
+    },
+
+    "/inventory": {
+      "get": {
+        "summary": "Отримати список інвентарю",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+
+    "/inventory/{id}": {
+      "get": {
+        "summary": "Отримати річ за ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      },
+      "put": {
+        "summary": "Оновити річ",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      },
+      "delete": {
+        "summary": "Видалити річ",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      }
+    },
+
+    "/inventory/{id}/photo": {
+      "get": {
+        "summary": "Отримати фото",
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      },
+      "put": {
+        "summary": "Оновити фото",
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      }
+    },
+
+    "/search": {
+      "post": {
+        "summary": "Пошук речі за ID (x-www-form-urlencoded)",
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      }
+    }
+  }
+}
