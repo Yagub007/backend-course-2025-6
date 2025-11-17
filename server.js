@@ -230,6 +230,58 @@ async function startServer() {
     }
     return;
     }
+    // ---------- GET /inventory/:id/photo (асинхронно) ----------
+if (req.method === "GET" && req.url.startsWith("/inventory/") && req.url.endsWith("/photo")) {
+  try {
+    // 1️⃣ Отримуємо ID з URL
+    const id = Number(req.url.split("/")[2]);
+    if (!id) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Invalid ID" }));
+    }
+
+    // 2️⃣ Читаємо базу
+    const raw = await fs.readFile(DB_FILE, "utf8");
+    const db = JSON.parse(raw);
+
+    // 3️⃣ Знаходимо потрібну річ
+    const item = db.items.find(x => x.id === id);
+    if (!item || !item.photoFile) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Photo not found" }));
+    }
+
+    // 4️⃣ Формуємо шлях до фото
+    const filePath = path.join(PHOTOS_DIR, item.photoFile);
+
+    // 5️⃣ Перевіряємо чи файл існує
+    try {
+      await fs.access(filePath);
+    } catch {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "File missing on disk" }));
+    }
+
+    // 6️⃣ Визначаємо тип контенту (розширення файлу)
+    const ext = path.extname(filePath).toLowerCase();
+    const mime =
+      ext === ".png"
+        ? "image/png"
+        : ext === ".webp"
+        ? "image/webp"
+        : "image/jpeg"; // за замовчуванням
+
+    // 7️⃣ Повертаємо фото як потік
+    res.writeHead(200, { "Content-Type": mime });
+    const stream = (await fs.open(filePath)).createReadStream();
+    stream.pipe(res);
+  } catch (err) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+  }
+  return;
+}
+
 
 
     // --- якщо не /register ---
