@@ -139,7 +139,43 @@ async function startServer() {
     }
     return;
     }
+    if (req.method === "GET" && req.url.startsWith("/inventory/") && !req.url.endsWith("/photo")) {
+        try {
+            // 1️⃣ Отримуємо ID з URL
+            const parts = req.url.split("/");
+            const id = Number(parts[2]); // /inventory/5 → parts[2] = 5
 
+            if (!id) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "Invalid ID" }));
+            }
+
+            // 2️⃣ Читаємо базу
+            const raw = await fs.readFile(DB_FILE, "utf8");
+            const db = JSON.parse(raw);
+
+            // 3️⃣ Знаходимо річ
+            const item = db.items.find(x => x.id === id);
+
+            if (!item) {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "Not Found" }));
+            }
+
+            // 4️⃣ Формуємо JSON-відповідь
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            photo_url: item.photoFile ? `/inventory/${item.id}/photo` : null
+            }, null, 2));
+        } catch (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+        }
+        return;
+    }
 
     // --- якщо не /register ---
     res.statusCode = 200;
