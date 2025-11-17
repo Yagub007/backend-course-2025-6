@@ -354,6 +354,53 @@ if (req.method === "PUT" && req.url.startsWith("/inventory/") && req.url.endsWit
   }
   return;
 }
+// ---------- DELETE /inventory/:id (асинхронно) ----------
+if (req.method === "DELETE" && req.url.startsWith("/inventory/")) {
+  try {
+    // 1️⃣ Отримуємо ID
+    const id = Number(req.url.split("/")[2]);
+    if (!id) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Invalid ID" }));
+    }
+
+    // 2️⃣ Читаємо базу
+    const raw = await fs.readFile(DB_FILE, "utf8");
+    const db = JSON.parse(raw);
+
+    // 3️⃣ Знаходимо індекс елемента
+    const idx = db.items.findIndex(x => x.id === id);
+    if (idx === -1) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Item not found" }));
+    }
+
+    // 4️⃣ Отримуємо елемент і видаляємо з масиву
+    const [item] = db.items.splice(idx, 1);
+
+    // 5️⃣ Якщо фото існує — видаляємо файл
+    if (item.photoFile) {
+      const filePath = path.join(PHOTOS_DIR, item.photoFile);
+      try {
+        await fs.unlink(filePath);
+        console.log(`🧹 Фото видалено: ${filePath}`);
+      } catch {
+        console.warn("⚠️  Фото не знайдено на диску, пропускаємо");
+      }
+    }
+
+    // 6️⃣ Записуємо оновлену базу
+    await fs.writeFile(DB_FILE, JSON.stringify(db, null, 2));
+
+    // 7️⃣ Повертаємо результат
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, deleted_id: id }));
+  } catch (err) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+  }
+  return;
+}
 
 
 
