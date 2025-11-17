@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js --host 127.0.0.1 --port 8080 --cache .cache",
+    "dev": "nodemon server.js --host 127.0.0.1 --port 8080 --cache .cache"
   },
   "repository": {
     "type": "git",
