@@ -176,6 +176,61 @@ async function startServer() {
         }
         return;
     }
+    // ---------- PUT /inventory/:id (асинхронно) ----------
+    if (req.method === "PUT" && req.url.startsWith("/inventory/") && !req.url.endsWith("/photo")) {
+    try {
+        // 1️⃣ Отримуємо ID з URL
+        const id = Number(req.url.split("/")[2]);
+        if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Invalid ID" }));
+        }
+
+        // 2️⃣ Зчитуємо тіло запиту
+        let body = "";
+        req.on("data", chunk => (body += chunk));
+        req.on("end", async () => {
+        try {
+            // 3️⃣ Парсимо JSON
+            const data = JSON.parse(body);
+            if (!data.name && !data.description) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "Nothing to update" }));
+            }
+
+            // 4️⃣ Читаємо базу
+            const raw = await fs.readFile(DB_FILE, "utf8");
+            const db = JSON.parse(raw);
+
+            // 5️⃣ Знаходимо річ
+            const item = db.items.find(x => x.id === id);
+            if (!item) {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "Not Found" }));
+            }
+
+            // 6️⃣ Оновлюємо дані
+            if (data.name) item.name = data.name;
+            if (data.description) item.description = data.description;
+
+            // 7️⃣ Записуємо назад у файл
+            await fs.writeFile(DB_FILE, JSON.stringify(db, null, 2));
+
+            // 8️⃣ Відповідь 200 OK
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(item, null, 2));
+        } catch (err) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Invalid JSON", details: String(err) }));
+        }
+        });
+    } catch (err) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+    }
+    return;
+    }
+
 
     // --- якщо не /register ---
     res.statusCode = 200;
