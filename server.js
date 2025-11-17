@@ -115,6 +115,31 @@ async function startServer() {
       });
       return;
     }
+    // ---------- GET /inventory (асинхронно) ----------
+    if (req.method === "GET" && req.url === "/inventory") {
+    try {
+        // 1️⃣ читаємо JSON-файл з базою
+        const raw = await fs.readFile(DB_FILE, "utf8");
+        const db = JSON.parse(raw);
+
+        // 2️⃣ формуємо список для відповіді
+        const list = db.items.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        photo_url: item.photoFile ? `/inventory/${item.id}/photo` : null
+        }));
+
+        // 3️⃣ повертаємо JSON
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(list, null, 2));
+    } catch (err) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+    }
+    return;
+    }
+
 
     // --- якщо не /register ---
     res.statusCode = 200;
