@@ -16,6 +16,7 @@ const options = program.opts();
 const HOST = options.host;
 const PORT = Number(options.port);
 const CACHE_DIR = options.cache;
+const PUBLIC_DIR = path.join(process.cwd(), "public");
 
 // ------------------ Асинхронна ініціалізація кешу ------------------
 async function ensureCache() {
@@ -402,7 +403,76 @@ if (req.method === "DELETE" && req.url.startsWith("/inventory/")) {
   return;
 }
 
+if (req.method === "GET" && req.url === "/RegisterForm.html") {
+  try {
+    const html = await fs.readFile(path.join(PUBLIC_DIR, "RegisterForm.html"));
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(html);
+  } catch {
+    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+    res.end("Файл не знайдено");
+  }
+  return;
+}
 
+// ---------- GET /SearchForm.html ----------
+if (req.method === "GET" && req.url === "/SearchForm.html") {
+  try {
+    const html = await fs.readFile(path.join(PUBLIC_DIR, "SearchForm.html"));
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(html);
+  } catch {
+    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+    res.end("Файл не знайдено");
+  }
+  return;
+}
+if (req.method === "POST" && req.url === "/search") {
+  let body = "";
+
+  req.on("data", chunk => {
+    body += chunk;
+  });
+
+  req.on("end", async () => {
+    const params = new URLSearchParams(body);
+
+    const id = Number(params.get("id"));
+    const hasPhoto = params.get("has_photo") !== null;
+
+    if (!id) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Invalid ID" }));
+    }
+
+    try {
+      const dbRaw = await fs.readFile(DB_FILE, "utf8");
+      const db = JSON.parse(dbRaw);
+
+      const item = db.items.find(x => x.id === id);
+
+      if (!item) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Not Found" }));
+      }
+
+      // Додаємо посилання на фото (тільки якщо прапорець активний)
+      if (hasPhoto && item.photoFile && !item.description.includes("/photo")) {
+        item.description += ` [Фото: /inventory/${item.id}/photo]`;
+        await fs.writeFile(DB_FILE, JSON.stringify(db, null, 2));
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify(item));
+
+    } catch (e) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Server error", details: e.toString() }));
+    }
+  });
+
+  return;
+}
 
     // --- якщо не /register ---
     res.statusCode = 200;
