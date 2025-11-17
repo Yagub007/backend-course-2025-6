@@ -281,6 +281,79 @@ if (req.method === "GET" && req.url.startsWith("/inventory/") && req.url.endsWit
   }
   return;
 }
+// ---------- PUT /inventory/:id/photo (асинхронно) ----------
+if (req.method === "PUT" && req.url.startsWith("/inventory/") && req.url.endsWith("/photo")) {
+  try {
+    // 1️⃣ Отримуємо ID
+    const id = Number(req.url.split("/")[2]);
+    if (!id) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Invalid ID" }));
+    }
+
+    // 2️⃣ Читаємо базу
+    const raw = await fs.readFile(DB_FILE, "utf8");
+    const db = JSON.parse(raw);
+
+    // 3️⃣ Знаходимо річ
+    const item = db.items.find(x => x.id === id);
+    if (!item) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Item not found" }));
+    }
+
+    // 4️⃣ Готуємо форму для нового фото
+    await fs.mkdir(PHOTOS_DIR, { recursive: true });
+    const form = formidable({
+      uploadDir: PHOTOS_DIR,
+      keepExtensions: true,
+      multiples: false
+    });
+
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Upload error", details: String(err) }));
+      }
+
+      // 5️⃣ Отримуємо новий файл
+      const fileObj = files.photo && (Array.isArray(files.photo) ? files.photo[0] : files.photo);
+      if (!fileObj || !fileObj.filepath) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "No photo provided" }));
+      }
+
+      // 6️⃣ Якщо старе фото існує — видаляємо його
+      if (item.photoFile) {
+        const oldPath = path.join(PHOTOS_DIR, item.photoFile);
+        try {
+          await fs.unlink(oldPath);
+          console.log(`🧹 Старе фото видалено: ${oldPath}`);
+        } catch {
+          console.warn("⚠️  Старе фото не знайдено на диску, пропускаємо");
+        }
+      }
+
+      // 7️⃣ Зберігаємо новий файл у БД
+      const newFile = path.basename(fileObj.filepath);
+      item.photoFile = newFile;
+      await fs.writeFile(DB_FILE, JSON.stringify(db, null, 2));
+
+      // 8️⃣ Відповідь 200 OK
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        photo_url: `/inventory/${item.id}/photo`
+      }, null, 2));
+    });
+  } catch (err) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Server error", details: String(err) }));
+  }
+  return;
+}
 
 
 
