@@ -3,7 +3,6 @@ import http from "http";
 import fs from "fs";
 import path from "path";
 import { program } from "commander";
-
 // ------------------ CLI аргументи ------------------
 program
   .requiredOption("-h, --host <host>", "Server host (обов’язковий параметр)")
@@ -23,6 +22,18 @@ if (!fs.existsSync(CACHE_DIR)) {
   console.log(`✅ Створено директорію кешу: ${CACHE_DIR}`);
 } else {
   console.log(`ℹ️  Використовується існуюча директорія кешу: ${CACHE_DIR}`);
+}
+import path from "path";
+
+const DATA_DIR = path.join(CACHE_DIR, "data");
+const PHOTOS_DIR = path.join(CACHE_DIR, "photos");
+const DB_FILE = path.join(DATA_DIR, "inventory.json");
+
+fs.mkdirSync(DATA_DIR, { recursive: true });
+fs.mkdirSync(PHOTOS_DIR, { recursive: true });
+
+if (!fs.existsSync(DB_FILE)) {
+  fs.writeFileSync(DB_FILE, JSON.stringify({ lastId: 0, items: [] }, null, 2));
 }
 
 // ------------------ HTTP-сервер ------------------
